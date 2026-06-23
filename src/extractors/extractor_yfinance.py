@@ -6,6 +6,13 @@ class StockExtractor():
         self.period = period
 
     def download(self):
-        self.data = yf.download(self.tickers, period=self.period)
-        
-        return self.data
+        dataFrame = {}
+        for c in self.tickers:
+            df_temp = yf.download(c, period=self.period)
+            df_temp.columns = df_temp.columns.droplevel("Ticker")
+            dataFrame[c] = df_temp
+
+        self.data = dataFrame
+
+        return dataFrame
+    
