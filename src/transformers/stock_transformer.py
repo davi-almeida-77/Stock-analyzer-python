@@ -5,6 +5,6 @@ class StockTransformer():
         self.data = data
 
     def transform(self):
-        df = self.data.stack(level="Ticker")
+        df = pd.concat(objs=self.data.values(), keys=self.data.keys())
 
         return df
