@@ -1,4 +1,6 @@
 import pandas as pd
+from pathlib import Path
+
 
 class StockTransformer():
     def __init__(self, data):
@@ -14,6 +16,13 @@ class StockTransformer():
         df["Diary_return"] = df.groupby(level=0)["Close"].transform(lambda x: x.pct_change())
 
         df["Volatility"] = df.groupby(level=0)["Diary_return"].transform(lambda x: x.rolling(20).std())
+
+        folder = Path(__file__).resolve().parent.parent.parent / "data" / "processed"
+
+        folder.mkdir(parents=True, exist_ok=True)        
+
+        file = folder / f"stocks_processed.xlxs"
+        df.to_excel(file)
 
 
         return df

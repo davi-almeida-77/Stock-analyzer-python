@@ -23,7 +23,7 @@ class StockExtractor():
         folder.mkdir(parents=True, exist_ok=True)        
 
         for ticker, df in self.data.items():
-             file = folder / f"{ticker}.csv"
+             file = folder / f"{ticker}.xlsx"
              df.to_excel(file)
     
 
