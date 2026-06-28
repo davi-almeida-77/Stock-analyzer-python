@@ -14,9 +14,19 @@ class ExcelExporter():
         self.dataframe = dataFrame
 
     def CreateSheetStructure(self):
+
+        df = self.dataframe.reset_index()
+        df = df.rename(columns={'level_0':'Ticker'})
+        df_month = df.groupby("Ticker").resample("ME", on="Date")["Close"].last()
+        df_month = df_month.pct_change()
+        df_month.index = df_month.index.set_levels(df_month.index.levels[1].date, level=1)
+
+        
+        
+
         with pd.ExcelWriter(output) as writer:
             self.dataframe.to_excel(writer, sheet_name="History")
-            self.dataframe.to_excel(writer, sheet_name="Month_Return")
+            df_month.to_excel(writer, sheet_name="Month_Return")
             self.dataframe.to_excel(writer, sheet_name="Resume")
 
 
