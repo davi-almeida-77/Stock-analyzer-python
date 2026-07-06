@@ -21,8 +21,11 @@ class StockTransformer():
 
         folder.mkdir(parents=True, exist_ok=True)        
 
-        file = folder / f"stocks_processed.xlxs"
-        df.to_excel(file)
+        file = folder / f"stocks_processed.xlsx"
 
+        df_save = df.reset_index()
+        df_save = df_save.rename(columns={"level_0": "Ticker"})
+        df_save.to_excel(file, index=False)
+        
 
         return df
