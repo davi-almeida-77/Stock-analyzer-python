@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.graph_objects as go
 from pathlib import Path
 
 st.title("Market Stock Analyzer")
@@ -18,7 +19,16 @@ options =  st.selectbox("Chose an Option", columns)
 df_filter = df[df["Ticker"] == options]
 
 st.write(f"Data Of {options}:")
-st.line_chart(df_filter.set_index("Date")["Close"])
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(x=df_filter["Date"], y=df_filter["Close"], name="Close", line=dict(color="#2a78d6", width=2)))
+fig.add_trace(go.Scatter(x=df_filter["Date"], y=df_filter["MM20"], name="MM20", line=dict(color="#eda100", width=1.5, dash="dash")))
+fig.add_trace(go.Scatter(x=df_filter["Date"], y=df_filter["MM50"], name="MM50", line=dict(color="#e34948", width=1.5, dash="dash")))
+
+fig.update_layout(title=f"{options} — Price and Mobile Average", xaxis_title="Data", yaxis_title="Price", hovermode="x unified")
+
+st.plotly_chart(fig, use_container_width=True)
 
 first_value = df_filter["Close"].iloc[0]
 last_value = df_filter["Close"].iloc[-1]
